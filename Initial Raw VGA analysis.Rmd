@@ -1,0 +1,508 @@
+---
+title: "Bennett VGA Analysis"
+author: "Logan Brady"
+date: "2023-02-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+#DATA CLEANING
+
+#Import library packages
+```{r}
+library(readr)
+library(data.table)
+library(dplyr)
+```
+
+#Import data file
+```{r}
+VGAdata <- read_csv("C:/Users/Logan/OneDrive/Desktop/VGA Analysis/Raw VGA Scores/Winter VGA Scores.csv")
+View(VGAdata)
+```
+
+#Return top portion of the dataset.
+```{r}
+head(x = VGAdata)
+```
+
+#Return column titles
+```{r}
+colnames(x = VGAdata)
+```
+
+
+#Remove ALL FILLER COLUMNS.
+
+#How to remove any "filler" columns from the dataset.
+```{r}
+VGAdata[ , c("Filler...7", "Filler...11", "Filler...22", "Filler...25", "Filler...34", "Filler...35", "Filler...37", "Filler...40", "Filler...41", "Filler...42", "Filler...47", "Filler...48", "Filler...49", "Filler...50", "Filler...51", "Filler...52", "Filler...53", "Filler...54", "Filler...55", "Filler...57", "Filler...59", "Filler...62", "Filler...63", "Filler...64", "Filler...65", "Filler...66", "Filler...67", "Filler...71", "Filler...73", "Filler...74", "Filler...76", "Filler...86", "Filler...91", "Filler...93", "Filler...95", "Filler...96", "Filler...97", "Filler...98", "Filler...99", "Filler...100", "Filler...101", "Filler...111", "Filler...113", "Filler...115", "Filler...116", "Filler...117", "Filler...126", "Filler...127", "Filler...128", "Filler...152", "Filler...153", "Filler...154", "Filler...159", "Filler...162")] <- list(NULL)
+
+colnames(x = VGAdata)
+```
+
+
+#Remove variables that do not have any useful data.
+
+#How to remove columns "STA-B", "Code VTLN", "Code TLN", "Code TFN", "Performance Level", "Reporting Cat Scaled Score 1", "Reporting Cat Scaled Score 2", "Reporting Cat Scaled Score 3", "Reporting Cat Scaled Score 4", "Reporting Cat Scaled Score 5", "Reporting Cat Scaled Score 6", "Reporting Cat Scaled Score 7", "Testing Status", "Z-Code-G", "Z-Code-F", "Z-Code-E", "SLIFE", "Recovery", "Retest", "Recently Arrived EL", "X-Code-D", "X-Code-c", "X-Code-B", "Foster Care", "Local Use Data - Student", "Virtual Virginia", "Temp Condition", "Resident Division", "Transfer", "SOA Adjustment - EL", "Middle Initial", and "Group Code" from the dataset.
+```{r}
+VGAdata[ , c("Z indicates End of Record", "STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", 
+             "STA-Code 8", "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27","STA-Code 28",
+             "STA-Code 29", "STA-Code 31", "STA-Code 32", "STA-B", "Code VTLN", "Code TLN", "Code TFN", "Performance Level", "Reporting Cat Scaled Score 1", 
+             "Reporting Cat Scaled Score 2", "Reporting Cat Scaled Score 3", "Reporting Cat Scaled Score 4", "Reporting Cat Scaled Score 5", 
+             "Reporting Cat Scaled Score 6", "Reporting Cat Scaled Score 7", "Test Scaled Score", "Testing Status", "Z-Code-G", "Z-Code-F", "Z-Code-E", "SLIFE", 
+             "Recovery", "Retest", "Recently Arrived EL", "X-Code-D", "X-Code-C", "X-Code-B", "Foster Care", "Local Use Data - Student", "Virtual Virginia",
+             "Temp Condition", "Resident Division", "Transfer", "SOA Adjustment - EL", "Middle Initial", "Group Code")] <- list(NULL)
+
+colnames(x = VGAdata)
+```
+
+
+
+
+#Isolate records that are in variables with low fill-in rate. If there are many "NA" in a column, isolate the few records within that area so those columns can be deleted later. These are based of VGAdata.
+
+#Return records of students who are Formerly EL.  
+```{r}
+Formerly_EL <- setDT(VGAdata, key = "Formerly EL")[J(c(1))]
+View(Formerly_EL)
+```
+
+#Return records of students who are currently EL, which will also display their levels.
+```{r}
+EL_Level <- VGAdata[VGAdata$"EL Overall Proficiency Level" > 9, ]
+View(EL_Level)
+```
+
+#Return records of students who posses a Stack Number. The df is only one student, so it includes Revision, Document ID, Sequence Number, and Batch Number.   
+```{r}
+StackNumber <- setDT(VGAdata, key = "Stack Number")[J(c(1))]
+View(StackNumber)
+```
+
+#Return records that contain "Y" values from STA-Code 1 - STA-Code 32. The code for this could be very long, so look for a way to isolate the rows from multiple columns. Im thinking something similar to -> {setDT(VGAdata, key = "STA-Code 1" : "STA-Code 32")} or VGAFall <- VGAdata[VGAdata$"STA-Code 1":"STA-Code 32" == "Y"]
+```{r}
+
+```
+
+
+
+
+#Removing columns Formerly EL, Revision, Document ID, Stack Number, Primary Nighttime Residence Code, Sequence Number, and Batch Number from VGAdata. These were saved under Formerly_EL and StackNumber.
+```{r}
+VGAdata[ , c("Formerly EL", "Revision", "Document ID", "Stack Number", "Sequence Number", "Batch Number", "Items Blank &/or Mult Marked", "Primary Nighttime Residence Code")] <- list(NULL)
+View(VGAdata)
+```
+```{r}
+VGAdata[ , c("EL Overall Proficiency Level")] <- list(NULL)
+View(VGAdata)
+```
+
+
+#Separating the dataset by year (fall or winter), based off VGAdata.
+
+#Create two dataframes, one for fall and one for winter. 
+```{r}
+VGAFall <- VGAdata[VGAdata$"Date Last Update - Year" == 2022, ]
+View(VGAFall)
+```
+```{r}
+VGAWinter <- VGAdata[VGAdata$"Date Last Update - Year" == 2023, ]
+View(VGAWinter)
+```
+
+
+#Create a data table based on Test name for each test and grade. There should be a total of 6 data tables. Will be saved as CSV files
+
+#3rd Grade Reading for fall and winter.
+```{r}
+ReadingFall3 <- setDT(VGAFall, key = "Test Name")[J(c("3 Read Growth CAT"))]
+ReadingWinter3 <- setDT(VGAWinter, key = "Test Name")[J(c("3 Read Growth CAT"))]
+
+head(ReadingFall3)
+head(ReadingWinter3)
+
+View(ReadingFall3)
+View(ReadingWinter3)
+```
+
+#3rd Grade Math for fall and winter.
+```{r}
+MathFall3 <- setDT(VGAFall, key = "Test Name")[J(c("3 Math Growth CAT"))]
+MathWinter3 <- setDT(VGAWinter, key = "Test Name")[J(c("3 Math Growth CAT"))]
+
+head(MathFall3)
+head(MathWinter3)
+
+View(MathFall3)
+View(MathWinter3)
+```
+
+#4th Grade Reading for fall and winter.
+```{r}
+ReadingFall4 <- setDT(VGAFall, key = "Test Name")[J(c("4 Read Growth CAT"))]
+ReadingWinter4 <- setDT(VGAWinter, key = "Test Name")[J(c("4 Read Growth CAT"))]
+
+head(ReadingFall4)
+head(ReadingWinter4)
+
+View(ReadingFall4)
+View(ReadingWinter4)
+```
+
+#4th Grade Math for fall and winter.
+```{r}
+MathFall4 <- setDT(VGAFall, key = "Test Name")[J(c("4 Math Growth CAT"))]
+MathWinter4 <- setDT(VGAWinter, key = "Test Name")[J(c("4 Math Growth CAT"))]
+
+head(MathFall4)
+head(MathWinter4)
+
+View(MathFall4)
+View(MathWinter4)
+```
+
+#5th Grade Reading for fall and winter.
+```{r}
+ReadingFall5 <- setDT(VGAFall, key = "Test Name")[J(c("5 Read Growth CAT"))]
+ReadingWinter5 <- setDT(VGAWinter, key = "Test Name")[J(c("5 Read Growth CAT"))]
+
+head(ReadingFall5)
+head(ReadingWinter5)
+
+View(ReadingFall5)
+View(ReadingWinter5)
+```
+
+#5th Grade Math for fall and winter.
+```{r}
+MathFall5 <- setDT(VGAFall, key = "Test Name")[J(c("5 Math Growth CAT"))]
+MathWinter5 <- setDT(VGAWinter, key = "Test Name")[J(c("5 Math Growth CAT"))]
+
+head(MathFall5)
+head(MathWinter5)
+
+View(MathFall5)
+View(MathWinter5)
+```
+
+
+
+
+#Create data tables based on variables conditions. For example, create a data table to display the records of students who have disabilities.
+
+
+#3RD GRADE
+
+#Create a dataframe of 3RD GRADE DISABLED STUDENTS READING SCORES.
+```{r}
+Disabled_ReadingFall3 <- ReadingFall3[ReadingFall3$"Disability Status" %in% c(1:20), ]
+Disabled_ReadingWinter3 <- ReadingWinter3[ReadingWinter3$"Disability Status" %in% c(1:20), ]
+
+View(Disabled_ReadingFall3)
+View(Disabled_ReadingWinter3)
+```
+
+#Create a dataframe of 3RD GRADE DISABLED STUDENTS MATH SCORES.
+```{r}
+Disabled_MathFall3 <- MathFall3[MathFall3$"Disability Status" %in% c(1:20), ]
+Disabled_MathWinter3 <- MathWinter3[MathWinter3$"Disability Status" %in% c(1:20), ]
+
+View(Disabled_MathFall3)
+View(Disabled_MathWinter3)
+```
+
+
+
+#4TH GRADE
+
+#Create a dataframe of 4TH GRADE DISABLED STUDENTS READING SCORES.
+```{r}
+Disabled_ReadingFall4 <- ReadingFall4[ReadingFall4$"Disability Status" %in% c(1:20), ]
+Disabled_ReadingWinter4 <- ReadingWinter4[ReadingWinter4$"Disability Status" %in% c(1:20), ]
+
+View(Disabled_ReadingFall4)
+View(Disabled_ReadingWinter4)
+```
+
+#Create a dataframe of 4TH GRADE DISABLED STUDENTS MATH SCORES.
+```{r}
+Disabled_MathFall4 <- MathFall4[MathFall4$"Disability Status" %in% c(1:20), ]
+Disabled_MathWinter4 <- MathWinter4[MathWinter4$"Disability Status" %in% c(1:20), ]
+
+View(Disabled_MathFall4)
+View(Disabled_MathWinter4)
+```
+
+
+
+#5TH GRADE
+
+#Create a dataframe of 5TH GRADE DISABLED STUDENTS READING SCORES.
+```{r}
+Disabled_ReadingFall5 <- ReadingFall5[ReadingFall5$"Disability Status" %in% c(1:20), ]
+Disabled_ReadingWinter5 <- ReadingWinter5[ReadingWinter5$"Disability Status" %in% c(1:20), ]
+
+View(Disabled_ReadingFall5)
+View(Disabled_ReadingWinter5)
+```
+
+#Create a dataframe of 5TH GRADE DISABLED STUDENTS MATH SCORES.
+```{r}
+Disabled_MathFall5 <- MathFall5[MathFall5$"Disability Status" %in% c(1:20), ]
+Disabled_MathWinter5 <- MathWinter5[MathWinter5$"Disability Status" %in% c(1:20), ]
+
+View(Disabled_MathFall5)
+View(Disabled_MathWinter5)
+```
+
+
+#More VGAdata cleaning.
+
+#Remove Disability Status from ALL data frames created, except for the disabled data frames.
+```{r}
+VGAdata[ , c("Disability Status")] <- list(NULL)
+Formerly_EL[ , c("Disability Status")] <- list(NULL)
+EL_Level[ , c("Disability Status")] <- list(NULL)
+VGAFall[ , c("Disability Status")] <- list(NULL)
+VGAWinter[ , c("Disability Status")] <- list(NULL)
+
+
+
+ReadingFall3[ , c("Disability Status")] <- list(NULL)
+ReadingWinter3[ , c("Disability Status")] <- list(NULL)
+
+MathFall3[ , c("Disability Status")] <- list(NULL)
+MathWinter3[ , c("Disability Status")] <- list(NULL)
+
+ReadingFall4[ , c("Disability Status")] <- list(NULL)
+ReadingWinter4[ , c("Disability Status")] <- list(NULL)
+
+MathFall4[ , c("Disability Status")] <- list(NULL)
+MathWinter4[ , c("Disability Status")] <- list(NULL)
+
+ReadingFall5[ , c("Disability Status")] <- list(NULL)
+ReadingWinter5[ , c("Disability Status")] <- list(NULL)
+
+MathFall5[ , c("Disability Status")] <- list(NULL)
+MathWinter5[ , c("Disability Status")] <- list(NULL)
+
+
+
+View(ReadingFall3)
+View(ReadingWinter3)
+
+View(MathFall3)
+View(MathWinter3)
+
+View(ReadingFall4)
+View(ReadingWinter4)
+
+View(MathFall4)
+View(MathWinter4)
+
+View(ReadingFall5)
+View(ReadingWinter5)
+
+View(MathFall5)
+View(MathWinter5)
+```
+
+#Removing STA-Code 1 - STA-Code 32 from ALL dataframes created. DO NOT REMOVE ANY STA-CODES FROM ANY DISABLED DATASETS! THAT'S WHERE THE ENTRIES ARE FOR THOSE VARIABLES! 
+```{r}
+VGAdata[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+
+Formerly_EL[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+
+EL_Level[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+
+VGAFall[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+
+VGAWinter[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+
+
+
+ReadingFall3[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+ReadingWinter3[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+
+
+MathFall3[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+MathWinter3[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+
+
+ReadingFall4[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+ReadingWinter4[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+
+
+MathFall4[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+MathWinter4[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+
+
+ReadingFall5[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+ReadingWinter5[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+
+
+MathFall5[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+MathWinter5[ , c("STA-Code 1", "STA-Code 2", "STA-Code 3", "STA-Code 4", "STA-Code 5", "STA-Code 6", "STA-Code 7", "STA-Code 8",
+             "STA-Code 9", "STA-Code 10", "STA-Code 11", "STA-Code 12", "STA-Code 13", "STA-Code 14", "STA-Code 15", "STA-Code 16",
+             "STA-Code 17", "STA-Code 18", "STA-Code 19", "STA-Code 20", "STA-Code 21", "STA-Code 22", "STA-Code 26", "STA-Code 27",
+             "STA-Code 28", "STA-Code 29", "STA-Code 31", "STA-Code 32")] <- list(NULL)
+
+
+
+View(ReadingFall3)
+View(ReadingWinter3)
+
+View(MathFall3)
+View(MathWinter3)
+
+View(ReadingFall4)
+View(ReadingWinter4)
+
+View(MathFall4)
+View(MathWinter4)
+
+View(ReadingFall5)
+View(ReadingWinter5)
+
+View(MathFall5)
+View(MathWinter5)
+```
+
+#Save all dataframes as CSV files.
+```{r}
+write.csv(VGAdata, "VGAdata.csv")
+write.csv(Formerly_EL, "FormerlyEL.csv")
+write.csv(EL_Level, "EL_Level.csv")
+write.csv(StackNumber, "StackNumber.csv")
+write.csv(VGAFall, "VGAFall.csv")
+write.csv(VGAWinter, "VGAWinter.csv")
+
+
+
+write.csv(ReadingFall3, "ReadingFall3.csv")
+write.csv(ReadingWinter3, "ReadingWinter3.csv")
+write.csv(MathFall3, "MathFall3.csv")
+write.csv(MathWinter3, "MathWinter3.csv")
+
+write.csv(ReadingFall4, "ReadingFall4.csv")
+write.csv(ReadingWinter4, "ReadingWinter4.csv")
+write.csv(MathFall4, "MathFall4.csv")
+write.csv(MathWinter4, "MathWinter4.csv")
+
+write.csv(ReadingFall5, "ReadingFall5.csv")
+write.csv(ReadingWinter5, "ReadingWinter5.csv")
+write.csv(MathFall5, "MathFall5.csv")
+write.csv(MathWinter5, "MathWinter5.csv")
+
+
+
+write.csv(Disabled_ReadingFall3, "Disabled_ReadingFall3.csv")
+write.csv(Disabled_ReadingWinter3, "Disabled_ReadingWinter3.csv")
+write.csv(Disabled_MathFall3, "Disabled_MathFall3.csv")
+write.csv(Disabled_MathWinter3, "Disabled_MathWinter3.csv")
+
+write.csv(Disabled_ReadingFall4, "Disabled_ReadingFall4.csv")
+write.csv(Disabled_ReadingWinter4, "Disabled_ReadingWinter4.csv")
+write.csv(Disabled_MathFall4, "Disabled_MathFall4.csv")
+write.csv(Disabled_MathWinter4, "Disabled_MathWinter4.csv")
+
+write.csv(Disabled_ReadingFall5, "Disabled_ReadingFall5.csv")
+write.csv(Disabled_ReadingWinter5, "Disabled_ReadingWinter5.csv")
+write.csv(Disabled_MathFall5, "Disabled_MathFall5.csv")
+write.csv(Disabled_MathWinter5, "Disabled_MathWinter5.csv")
+```
+
+
+
+#DATA ANALYSIS
+
+#How to find the average scores per test and grade.
+
+#Create a dataframe of 3rd grade reading scores and find the average
+```{r}
+RFScores3 <- ReadingFall3[, c("First Name", "Last Name", "Vertical Scaled Score")]
+RWScores3 <- ReadingWinter3[, c("First Name", "Last Name", "Vertical Scaled Score")]
+
+View(RFScores3)
+View(RWScores3)
+```
+```{r}
+RScores3 <- merge(x = RFScores3, y = RWScores3, by = "Last Name")
+colnames(x = RScores3)
+View(RScores3)
+
+```
+
+
+#Finding the average of ReadingFall3 and ReadingWinter 3.
+```{r}
+mean(RFScores3$"Vertical Scaled Score")
+mean(RWScores3$"Vertical Scaled Score")
+
+sd(RFScores3$"Vertical Scaled Score")
+sd(RWScores3$"Vertical Scaled Score")
+
+```
+
+#Create a dotchart for the test scores
+```{r}
+dotchart(RFScores3$"Vertical Scaled Score", labels=RFScores3$"Last Name", cex = .27, main = "3rd Grade Fall Reading Scores", xlab = "Score")
+```
+
+
+
+#Input other demographics included on planned dashboard layout.

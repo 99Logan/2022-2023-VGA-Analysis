@@ -1,0 +1,88 @@
+---
+title: "Grade 4"
+author: "Logan Brady"
+date: "2023-02-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+#Importing library packages
+```{r}
+library(arsenal)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+library(tidyr)
+library(tidyverse)
+library(data.table)
+library(readxl)
+
+```
+
+#Importing Data files (Starting with Reading and Math Detail by Question, Sheets 3 and 11)
+```{r}
+
+Reading_Detail4 <- read_excel("4th VGA Analysis - 22-23.xlsx", sheet = 3)
+Math_Detail4 <- read_excel("4th VGA Analysis - 22-23.xlsx", sheet = 11)
+
+View(Reading_Detail4)
+View(Math_Detail4)
+```
+
+#How to return column titles
+```{r}
+colnames(x = Reading_Detail4)
+colnames(x = Math_Detail4)
+```
+
+#Query and store datafile for Thrift. Math and reading.
+```{r}
+ThriftReading_Detail <- setDT(Reading_Detail4, key = "Delivery Group")[J(c("WI THRIFTM"))]
+View(ThriftReading_Detail)
+
+ThriftMath_Detail <- setDT(Math_Detail4, key = "Delivery Group")[J(c("WI THRIFTM"))]
+View(ThriftMath_Detail)
+
+write.csv(ThriftReading_Detail, "ThriftReading_WinterDetail.csv")
+write.csv(ThriftMath_Detail, "ThriftMath_WinterDetail.csv")
+```
+
+#Query and store datafile for Grant. Math and reading.
+```{r}
+GrantReading_Detail <- setDT(Reading_Detail4, key = "Delivery Group")[J(c("WI GRANTB"))]
+View(GrantReading_Detail)
+
+GrantMath_Detail <- setDT(Math_Detail4, key = "Delivery Group")[J(c("WI GRANTB"))]
+View(GrantMath_Detail)
+
+write.csv(GrantReading_Detail, "GrantReading_WinterDetail.csv")
+write.csv(GrantMath_Detail, "GrantMath_WinterDetail.csv")
+```
+
+#Query and store datafile for Thorp. Math and reading.
+```{r}
+ThorpReading_Detail <- setDT(Reading_Detail4, key = "Delivery Group")[J(c("WI THORPK"))]
+View(ThorpReading_Detail)
+
+ThorpMath_Detail <- setDT(Math_Detail4, key = "Delivery Group")[J(c("WI THORPK"))]
+View(ThorpMath_Detail)
+
+write.csv(ThorpReading_Detail, "ThorpReading_WinterDetail.csv")
+write.csv(ThorpMath_Detail, "ThorpMath_WinterDetail.csv")
+```
+
+#Query and store datafile for Conlan. Math and reading.
+```{r}
+ConlanReading_Detail <- setDT(Reading_Detail4, key = "Delivery Group")[J(c("WI CONLANS"))]
+View(ConlanReading_Detail)
+
+ConlanMath_Detail <- setDT(Math_Detail4, key = "Delivery Group")[J(c("WI CONLANS"))]
+View(ConlanMath_Detail)
+
+write.csv(ConlanReading_Detail, "ConlanReading_WinterDetail.csv")
+write.csv(ConlanMath_Detail, "ConlanMath_WinterDetail.csv")
+```

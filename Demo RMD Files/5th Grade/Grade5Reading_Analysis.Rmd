@@ -1,0 +1,77 @@
+---
+title: "Grade 5 Reading"
+author: "Logan Brady"
+date: "2023-02-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Importing library packages
+```{r}
+library(arsenal)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+library(tidyr)
+library(tidyverse)
+library(data.table)
+library(readxl)
+library(readr)
+```
+
+#Importing th Grade Reading Data files
+```{r}
+
+Reading_Fall5 <- read_excel("C:/Users/Logan/OneDrive/Desktop/VGA Analysis/Raw VGA Scores/5 VGA analysis 22-23.xlsx", sheet = 1)
+Reading_Winter5 <- read_excel("C:/Users/Logan/OneDrive/Desktop/VGA Analysis/Raw VGA Scores/5 VGA analysis 22-23.xlsx", sheet = 2)
+
+View(Reading_Fall5)
+View(Reading_Winter5)
+```
+
+#Cleaning the datasets.
+
+#Comparing two datasets using comparedf()
+```{r}
+summary(comparedf(Reading_Fall5, Reading_Winter5))
+```
+
+#How to return column titles
+```{r}
+head(x = Reading_Fall5)
+colnames(x = Reading_Fall5)
+
+head(x = Reading_Winter5)
+colnames(x = Reading_Winter5)
+```
+
+#Rename data columns
+```{r}
+colnames(Reading_Fall5)[1] = "Last Name"
+colnames(Reading_Fall5)[2] = "First Name"
+colnames(Reading_Fall5)[3] = "Teacher"
+colnames(Reading_Fall5)[4] = "Vertical Scaled Score"
+
+colnames(Reading_Winter5)[1] = "Last Name"
+colnames(Reading_Winter5)[2] = "First Name"
+colnames(Reading_Winter5)[3] = "Teacher"
+colnames(Reading_Winter5)[4] = "Vertical Scaled Score"
+
+colnames(x = Reading_Fall5)
+colnames(x = Reading_Winter5)
+```
+
+#Manipulating record numbers 61, 89, 90, 97, 112  in Reading_Fall5 to make them unique indentifiers. Changing "LONG" to "LONG S.", "RODGERS" to "RODGERS W.", "RODRIGUEZ" to "RODRIGUEZ J.", "SAYLOR" to "SAYLOR A.", and "VARGAS" to "VARGAS N.".
+```{r}
+Reading_Fall5[61, 1] <- "LONG S."
+Reading_Fall5[89, 1] <- "RODGERS W."
+Reading_Fall5[90, 1] <- "RODRIGUEZ J."
+Reading_Fall5[97, 1] <- "SAYLOR A."
+Reading_Fall5[112, 1] <- "VARGAS N."
+
+view(Reading_Fall5)
+```
+

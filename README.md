@@ -6,31 +6,43 @@ The 2022-2023 Bennett Elementary School VGA Analysis is the first ever Univariat
 
 The VGAs, or Virginia Growth Assessments, are standardized examinations designed to rate the progress of Virginian students in mathematics and reading. These examinations are administered twice a year; once in fall and winter. 
 
-The SOLs, or Standard of Learning assessment(S), are standardized examinations administered annually to Virgninian students in the spring. The subjects for these examinations vary based on the grade of the student. The goal of the VGAs is to benchmark students to prepare them for the SOLs.
+The SOLs, or Standard of Learning assessment(s), are standardized examinations administered annually to Virgninian students in the spring. The subjects for these examinations vary based on the grade of the student. The goal of the VGAs is to benchmark students to prepare them for the SOLs.
 
 ## Problem
 
 Since the beginning of the pandemic, numerous industries worldwide have been negatively impacted. While innovative technologies, like Zoom, Microsoft 365, and Canvas have assisted in the operations of businesses and programs worldwide, there are still many deficits that need to be addressed within our systems.
 
-One of most prominent industries that has been adversly impacted by this is the education system. Over the course of 3 years, students from grades 2-5 (US) have undergone several class modality changes, as well as the nuances of a new-age pandemic, which changed the teaching dogma and the dynamic of the classroom, forever. 
+One of most prominent industries that has been adversly impacted by this is the education system. Over the course of 3 years, students from grades 2-5 (US) have undergone several class modality changes, as well as the nuances of a new-age pandemic. This is a couple of many reasons why the dogma of teaching and the dynamic of the classroom is changed, forever. 
 
-With all of these changes, how are we supposed to keep track of everything? How are we suppose to find out whether our teaching methods are effective or not? The answer is simple! We need to effectively analyze our data!
+With all of these changes, how are we supposed to keep track of everything? How are we suppose to find out whether our teaching methods are effective or not? The answer is simple! We need to effectively collect and analyze our data!
+
+The goal for this project is to complete a comprehensive dashboard that displays student and school VGA information to be viewed by administration. This will remain a private project, so any individuals who view/possess information in this repository, can only do so with the permisson of the creator!  
 
 ## Process
 
-There are 5 stages to this data analysis project.  
+There are 5 stages to this data analysis project:  
 
-**Client Analysis**
+***Client Analysis***
 
-**Data Acquisition**
+***Data Acquisition***
 
-**Data Cleaning** 
+***Data Cleaning*** 
 
-**Exploratory Analysis**
+***Exploratory Analysis***
 
-**Data Visualization**
+***Data Visualization***
 
 ## Data Files, RMDs, and everything you need!
+
+**To be able to edit any of these files, you must have the following applications downloaded onto your PC/MAC:**
+
+*RStudio (.Rmd)*
+
+*Microsoft Excel (.csv)*
+
+*Microsoft PowerBI (.pbix)*
+
+*Microsoft PowerPoint (.pptx)*
 
 ### Data Cleaning Rmd Files
 *Initial Raw VGA analysis.Rmd*
